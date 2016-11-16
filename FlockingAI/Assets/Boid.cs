@@ -37,7 +37,20 @@ public class Boid : MonoBehaviour {
                 {
                     //This will need to be changed as it doesn't account for the boid's current direction
                     //Or for the clockwise/counter-clockwise perpendicular.
-                    Vector2 modVec = new Vector2(posDif.y, -posDif.x);
+                    //print(transform.name + " Angle: " + Vector2.Angle(posDif, heading));
+
+                    //Determine if the angle is positive or negative.
+                    Vector3 crossVec = Vector3.Cross(posDif, heading);
+                    Vector2 modVec = Vector2.zero;
+                    if (crossVec.z > 0)
+                    {
+                        modVec = new Vector2(-posDif.y, posDif.x);
+                    }
+                    else
+                    {
+                        modVec = new Vector2(posDif.y, -posDif.x);
+                    }
+                     
                     modVec.Normalize();
                     modVec *= (1 / posDif.magnitude) * BoidMaster.inst.separationForce;
                     heading += modVec;
@@ -68,5 +81,24 @@ public class Boid : MonoBehaviour {
         {
             boid.velocity = heading * BoidMaster.inst.maxVelocity;
         }
-	}
+
+        //Looping
+        if (transform.position.x > BoidMaster.inst.mapX)
+        {
+            transform.position = new Vector3(-BoidMaster.inst.mapX + 0.1f, transform.position.y, transform.position.z);
+        }
+        else if (transform.position.x < -BoidMaster.inst.mapX)
+        {
+            transform.position = new Vector3(BoidMaster.inst.mapX - 0.1f, transform.position.y, transform.position.z);
+        }
+
+        if (transform.position.y > BoidMaster.inst.mapY)
+        {
+            transform.position = new Vector3(transform.position.x, -BoidMaster.inst.mapY + 0.1f, transform.position.z);
+        }
+        else if (transform.position.y < -BoidMaster.inst.mapY)
+        {
+            transform.position = new Vector3(transform.position.x, BoidMaster.inst.mapY - 0.1f, transform.position.z);
+        }
+    }
 }

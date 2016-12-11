@@ -11,6 +11,8 @@ public class BoidMaster : MonoBehaviour {
     public float maxX;
     [Range(0f, 20f)]
     public float maxY;
+    public float mapX;
+    public float mapY;
 
     [Header("Flocking Values")]
     [Range(0f, 200f)]
@@ -37,7 +39,8 @@ public class BoidMaster : MonoBehaviour {
             float y = Random.Range(-maxY, maxY);
             Vector3 startPos = new Vector3(x, y, 0);
 
-            Instantiate(boid, startPos, Quaternion.identity);
+            GameObject newBoid = Instantiate(boid, startPos, Quaternion.identity) as GameObject;
+            newBoid.name = "Boid " + i;
         }
 	}
 	
